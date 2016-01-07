@@ -14,9 +14,10 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var movieSearchBar: UISearchBar!
+    @IBOutlet weak var networkErrorView: UIView!
 
-    
     var movies: [NSDictionary]? // optional can be dict or nil, safer
+    var allMovies: [NSDictionary]?
     
     var refreshControl: UIRefreshControl!
     var filteredData: [NSDictionary]?
@@ -30,6 +31,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         tableView.delegate = self
         movieSearchBar.delegate = self
         
+        self.networkErrorView.hidden = true
         
         self.refreshControl = UIRefreshControl()
         self.refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
@@ -47,35 +49,34 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     override func viewDidAppear(animated: Bool) {
         
     }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-    // Change the status bar c=to light color
+    // Change the status bar to light color
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return UIStatusBarStyle.LightContent
     }
     
-    
+    // Call movie api to get list of movies
     func fetchMovieApi(){
         
         let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
         let url = NSURL(string:"https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)")
         let request = NSURLRequest(URL: url!)
-            
-            
+        
         let session = NSURLSession(
             configuration: NSURLSessionConfiguration.defaultSessionConfiguration(),
             delegate:nil,
             delegateQueue:NSOperationQueue.mainQueue()
         )
         
-        //self.delay(3.0){ SVProgressHUD.show() }
         SVProgressHUD.show()
         let task : NSURLSessionDataTask = session.dataTaskWithRequest(request,
             completionHandler: { (dataOrNil, response, error) in
-                //self.delay(5.0) { SVProgressHUD.dismiss() }
+                
                 SVProgressHUD.dismiss()
                 if let data = dataOrNil {
                     if let responseDictionary = try! NSJSONSerialization.JSONObjectWithData(
@@ -83,24 +84,17 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                             print("response: \(responseDictionary)")
                             
                             self.movies = responseDictionary["results"] as? [NSDictionary]
+                            self.allMovies = self.movies!
                             self.tableView.reloadData()
+                    } else {
+                        self.networkErrorView.hidden = false
                     }
                 }
         });
         task.resume()
     }
     
-//    //add delay
-//    func delay(delay:Double, closure: () -> ()) {
-//        dispatch_after(
-//            dispatch_time(
-//                DISPATCH_TIME_NOW,
-//                Int64(delay * Double(NSEC_PER_SEC))
-//            ),
-//            dispatch_get_main_queue(), closure
-//        )
-//    }
-    
+    // set up table views
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     
         if let movies = movies{
@@ -134,40 +128,55 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         return cell
     }
     
-    
-    func hideKeyboard(searchBar: UISearchBar) {
-        searchBar.resignFirstResponder()
-    }
+    /* ----------------------------- Search Bar ----------------------------- */
     
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+        searchBar.setShowsCancelButton(true, animated: true)
         if(searchText.isEmpty) {
             movies = movies!
-            dispatch_after(1, dispatch_get_main_queue()) { () -> Void in
-                self.hideKeyboard(searchBar)
-            }
+            searchBar.endEditing(true)
         } else {
             movies = movies!.filter {
-                var name = $0["title"] as! String
-                return name.rangeOfString(searchText, options: .RegularExpressionSearch) != nil
+                let name = $0["title"] as! String
+                return name.rangeOfString(searchText, options: .CaseInsensitiveSearch) != nil
             }
         }
-        
         tableView.reloadData()
     }
     
+    func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
+        searchBar.setShowsCancelButton(true, animated: true)
+    }
+
     func searchBarTextDidEndEditing(searchBar: UISearchBar){
-        fetchMovieApi()
+        movies = allMovies
         tableView.reloadData()
+        searchBar.setShowsCancelButton(false, animated: true)
     }
     
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+        searchBarTextDidEndEditing(searchBar)
+        searchBar.endEditing(true)
+        searchBar.text = ""
     }
-    */
+    
 
+    /* ----------------- saved code for future references ---------------------
+    //add delay
+    func delay(delay:Double, closure: () -> ()) {
+        dispatch_after(
+            dispatch_time(
+                DISPATCH_TIME_NOW,
+                Int64(delay * Double(NSEC_PER_SEC))
+            ),
+            dispatch_get_main_queue(), closure
+        )
+    }
+    
+    usage:
+    self.delay(3.0){ SVProgressHUD.show() }
+    self.delay(5.0) { SVProgressHUD.dismiss() }
+
+    */
+    
 }

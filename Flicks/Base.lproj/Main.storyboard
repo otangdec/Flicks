@@ -61,20 +61,43 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <searchBar contentMode="redraw" text="" placeholder="search movies" showsCancelButton="YES" id="Cqq-tu-Lh5">
+                            <searchBar contentMode="redraw" text="" placeholder="search movies" id="Cqq-tu-Lh5">
                                 <rect key="frame" x="0.0" y="16" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <animations/>
                                 <rect key="contentStretch" x="0.0" y="0.0" width="1" height="0.5"/>
                                 <textInputTraits key="textInputTraits"/>
                             </searchBar>
+                            <view contentMode="scaleToFill" id="lgT-Gj-jve" userLabel="NetworkErrorView">
+                                <rect key="frame" x="0.0" y="60" width="320" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Network Error" textAlignment="center" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" id="RgG-dI-IGB">
+                                        <rect key="frame" x="106" y="-1" width="107" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <animations/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="alert-50" id="8W8-iz-VNf">
+                                        <rect key="frame" x="99" y="2" width="15" height="15"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <animations/>
+                                    </imageView>
+                                </subviews>
+                                <animations/>
+                                <color key="backgroundColor" red="0.17601985165794065" green="0.17601985165794065" blue="0.17601985165794065" alpha="1" colorSpace="calibratedRGB"/>
+                            </view>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" red="0.0011861910994764857" green="0.0011861910994764857" blue="0.0011861910994764857" alpha="1" colorSpace="calibratedRGB"/>
+                        <gestureRecognizers/>
                     </view>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <connections>
                         <outlet property="movieSearchBar" destination="Cqq-tu-Lh5" id="uZD-Ga-ZLZ"/>
+                        <outlet property="networkErrorView" destination="lgT-Gj-jve" id="son-vS-lYf"/>
                         <outlet property="tableView" destination="trl-My-brY" id="jMk-6U-9wk"/>
                     </connections>
                 </viewController>
@@ -83,4 +106,7 @@
             <point key="canvasLocation" x="222" y="359"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="alert-50" width="50" height="50"/>
+    </resources>
 </document>
