@@ -7,8 +7,9 @@
 //
 
 import UIKit
-import AFNetworking // clean and build to make it work correctly
 import SVProgressHUD
+import AFNetworking // clean and build to make it work correctly
+
 
 class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITabBarDelegate, UISearchBarDelegate{
     
