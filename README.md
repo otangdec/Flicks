@@ -23,7 +23,8 @@ The following **optional** features are implemented:
 
 The following **additional** features are implemented:
 
-- [x] Customize cancel button of the search bar to clear search box and hide keyboard
+- [x] Customize search bar's cancel button behavior
+- [x] Customize search bar's clear button behavior
 - [x] Add Launch Screen
 
 ## Video Walkthrough 
