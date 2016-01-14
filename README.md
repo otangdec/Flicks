@@ -24,6 +24,7 @@ The following **optional** features are implemented:
 The following **additional** features are implemented:
 
 - [x] Customize cancel button of the search bar to clear search box and hide keyboard
+- [x] Add Launch Screen
 
 ## Video Walkthrough 
 
@@ -35,11 +36,12 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
 
-Describe any challenges encountered while building the app.
+- There was a problem when installing CocoaPod which was the operating related problem and had to do the custom GEM_HOME to fix it.
+- Xcode Source control's command "Discard All Changes" cause a problem by deleting the CocoaPods and I have to re-install the CocoaPods again.
 
 ## License
 
-    Copyright [yyyy] [name of copyright owner]
+    Copyright 2016 Oranuch Tangdechavut
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
