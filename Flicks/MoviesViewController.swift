@@ -22,15 +22,20 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     
     var refreshControl: UIRefreshControl!
     var filteredData: [NSDictionary]?
+    var placeholderImage = UIImage(contentsOfFile: "flicks-logo")
     
 
     
     // Do any additional setup after loading the view.
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         tableView.dataSource = self
         tableView.delegate = self
         movieSearchBar.delegate = self
+        
+        
+
         
         self.networkErrorView.hidden = true
         
@@ -95,6 +100,8 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         task.resume()
     }
     
+    /* ------------------------------- Table View ---------------------------- */
+    
     // set up table views
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     
@@ -116,18 +123,54 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
 
         let baseUrl = "http://image.tmdb.org/t/p/w500"
         let imageUrl = NSURL(string: baseUrl + posterPath)
+        let request = NSURLRequest(URL: imageUrl!)
         
         
-        cell.posterView.setImageWithURL(imageUrl!)
+        //cell.posterView.setImageWithURL(imageUrl!)
+        cell.posterView.setImageWithURLRequest(request, placeholderImage: placeholderImage, success: { (request, response, imageData) -> Void in
+            UIView.transitionWithView(cell.posterView, duration: 1.0, options: UIViewAnimationOptions.TransitionCrossDissolve, animations: { cell.posterView.image = imageData }, completion: nil   )
+            }, failure: nil)
         cell.titleLabel.text = title
         cell.overviewLabel.text = overview
     
      
         print("row \(indexPath.row)")
     
-        
         return cell
     }
+    
+    /* -------------------------------- Collection View ------------------------------------------ */
+    
+//    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+//        if let movies = movies{
+//            return movies.count
+//        } else {
+//            return 0
+//        }
+//    }
+//    
+//    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+//        let cell = tableView.dequeueReusableCellWithIdentifier("MovieCell", forIndexPath: indexPath) as! MovieCell
+//        
+//        // ! menas the optional will not be nil
+//        let movie = movies![indexPath.row]
+//        let title = movie["title"] as! String
+//        let overview = movie["overview"] as! String
+//        let posterPath = movie["poster_path"] as! String
+//        
+//        let baseUrl = "http://image.tmdb.org/t/p/w500"
+//        let imageUrl = NSURL(string: baseUrl + posterPath)
+//        
+//        
+//        cell.posterView.setImageWithURL(imageUrl!)
+//        cell.titleLabel.text = title
+//        cell.overviewLabel.text = overview
+//        
+//        
+//        print("row \(indexPath.row)")
+//        
+//        return cell
+//    }
     
     /* ----------------------------- Search Bar ----------------------------- */
     
