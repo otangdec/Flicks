@@ -87,7 +87,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                 if let data = dataOrNil {
                     if let responseDictionary = try! NSJSONSerialization.JSONObjectWithData(
                         data, options:[]) as? NSDictionary {
-                            print("response: \(responseDictionary)")
+                            //print("response: \(responseDictionary)")
                             
                             self.movies = responseDictionary["results"] as? [NSDictionary]
                             self.allMovies = self.movies!
@@ -119,22 +119,22 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         let movie = movies![indexPath.row]
         let title = movie["title"] as! String
         let overview = movie["overview"] as! String
-        let posterPath = movie["poster_path"] as! String
-
         let baseUrl = "http://image.tmdb.org/t/p/w500"
-        let imageUrl = NSURL(string: baseUrl + posterPath)
-        let request = NSURLRequest(URL: imageUrl!)
         
+        if let posterPath = movie["poster_path"] as? String {
+            
+            let imageUrl = NSURL(string: baseUrl + posterPath)
+            let request = NSURLRequest(URL: imageUrl!)
         
-        //cell.posterView.setImageWithURL(imageUrl!)
-        cell.posterView.setImageWithURLRequest(request, placeholderImage: placeholderImage, success: { (request, response, imageData) -> Void in
-            UIView.transitionWithView(cell.posterView, duration: 1.0, options: UIViewAnimationOptions.TransitionCrossDissolve, animations: { cell.posterView.image = imageData }, completion: nil   )
-            }, failure: nil)
-        cell.titleLabel.text = title
-        cell.overviewLabel.text = overview
-    
+            //cell.posterView.setImageWithURL(imageUrl!)
+            cell.posterView.setImageWithURLRequest(request, placeholderImage: placeholderImage, success: { (request, response, imageData) -> Void in
+                UIView.transitionWithView(cell.posterView, duration: 1.0, options: UIViewAnimationOptions.TransitionCrossDissolve, animations: { cell.posterView.image = imageData }, completion: nil   )
+                }, failure: nil)
+            cell.titleLabel.text = title
+            cell.overviewLabel.text = overview
+        }
      
-        print("row \(indexPath.row)")
+        //print("row \(indexPath.row)")
     
         return cell
     }
@@ -205,6 +205,21 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
 
+    // MARKL - navigation
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        let cell = sender as! UITableViewCell
+        let indexPath = tableView.indexPathForCell(cell)
+        let movie = movies![indexPath!.row]
+        
+        let detailViewController = segue.destinationViewController as! DetailViewController
+        detailViewController.movie = movie
+        
+        //print("prepare for seque called")
+    }
+    
+    
     /* ----------------- saved code for future references ---------------------
     //add delay
     func delay(delay:Double, closure: () -> ()) {
