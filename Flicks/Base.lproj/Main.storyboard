@@ -35,7 +35,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="erD-i7-XbR">
-                                                    <rect key="frame" x="0.0" y="0.0" width="96" height="126.5"/>
+                                                    <rect key="frame" x="0.0" y="0.5" width="94" height="126"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <animations/>
                                                 </imageView>
@@ -81,7 +81,7 @@
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="37D0E8DF-F904-4848-B7B8-2E39548497F4" id="8W8-iz-VNf">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="B9FC12E5-42E9-407A-B7D1-C1577DD834D9" id="8W8-iz-VNf">
                                         <rect key="frame" x="99" y="2" width="15" height="15"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <animations/>
@@ -171,7 +171,7 @@
         <!--Navigation Controller-->
         <scene sceneID="lE1-tJ-cvk">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Imm-rP-BhF" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="MoviesNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="Imm-rP-BhF" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="lkO-Jp-2Ur">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -189,7 +189,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="37D0E8DF-F904-4848-B7B8-2E39548497F4" width="50" height="50">
+        <image name="B9FC12E5-42E9-407A-B7D1-C1577DD834D9" width="50" height="50">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGOjtYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK0HCBEW
 GxwgISgrLjQ3VSRudWxs1AkKCwwNDg8QViRjbGFzc1xOU0ltYWdlRmxhZ3NWTlNSZXBzV05TQ29sb3KA

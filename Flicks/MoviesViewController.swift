@@ -24,6 +24,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     var filteredData: [NSDictionary]?
     var placeholderImage = UIImage(contentsOfFile: "flicks-logo")
     
+    var endpoint: String!
 
     
     // Do any additional setup after loading the view.
@@ -44,11 +45,11 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         self.refreshControl.addTarget(self,action: "refresh:", forControlEvents: UIControlEvents.ValueChanged)
         self.tableView.addSubview(refreshControl)
         
-        fetchMovieApi()
+        networkRequest()
     }
     
     func refresh(sender:AnyObject){
-        fetchMovieApi()
+        networkRequest()
         self.refreshControl.endRefreshing()
     }
 
@@ -67,10 +68,10 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     // Call movie api to get list of movies
-    func fetchMovieApi(){
+    func networkRequest(){
         
         let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
-        let url = NSURL(string:"https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)")
+        let url = NSURL(string:"https://api.themoviedb.org/3/movie/\(endpoint)?api_key=\(apiKey)")
         let request = NSURLRequest(URL: url!)
         
         let session = NSURLSession(
