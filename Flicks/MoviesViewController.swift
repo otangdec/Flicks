@@ -35,14 +35,14 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        
         tableView.dataSource = self
         tableView.delegate = self
-        movieSearchBar.delegate = self
-        movieSearchBar.searchBarStyle = UISearchBarStyle.Minimal
-        //movieSearchBar.alpha = 0
-        movieSearchBar.hidden = true
         
         self.networkErrorView.hidden = true
+        
+        // Set up the Movie Search Bar
+        initializeMovieSearchBar()
         
         // Set up the refresh control for pull to refresh
         initializeRefreshControl()
@@ -52,6 +52,13 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
         // call Movie api to retrieve movie information
         networkRequest()
+    }
+    
+    func initializeMovieSearchBar(){
+        movieSearchBar.delegate = self
+        movieSearchBar.searchBarStyle = UISearchBarStyle.Minimal
+        //movieSearchBar.alpha = 0
+        movieSearchBar.hidden = true
     }
 
     func initializeRefreshControl(){
@@ -67,6 +74,14 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     func initializeNavBar(){
+        
+        // Set Title of the page according to the activated tab
+        if tabBarController?.selectedIndex == 0{
+            self.navigationItem.title = "Now Playing"
+        } else if tabBarController?.selectedIndex == 1 {
+            self.navigationItem.title = "Top Rated"
+        }
+        
         // Make search button and add into the navagation bar on the right
         rightSearchBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Search, target: self, action: "searchTapped:")
         self.navigationItem.rightBarButtonItem = rightSearchBarButtonItem
@@ -91,8 +106,6 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return UIStatusBarStyle.LightContent
     }
-    
-    
     
     // Call movie api to get list of movies
     func networkRequest(){
@@ -217,7 +230,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         navigationItem.titleView = nil
         movieSearchBar.text = ""
     }
-    /* -------------- */
+    /* -------------------------------------------------------------------------------------- */
 
     // MARKL - navigation
     
@@ -231,70 +244,4 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         detailViewController.movie = movie
     }
     
-    
-    /* ----------------- saved code for future references ---------------------
-    //add delay
-    func delay(delay:Double, closure: () -> ()) {
-        dispatch_after(
-            dispatch_time(
-                DISPATCH_TIME_NOW,
-                Int64(delay * Double(NSEC_PER_SEC))
-            ),
-            dispatch_get_main_queue(), closure
-        )
-    }
-    
-    usage:
-    self.delay(3.0){ SVProgressHUD.show() }
-    self.delay(5.0) { SVProgressHUD.dismiss() }
-
-    */
-    
-    
-    // Filter dictionary for search bar
-    //        if(searchText.isEmpty) {
-    //            movies = movies!
-    //            searchBar.endEditing(true)
-    //        } else {
-    //            movies = movies!.filter {
-    //                let name = $0["title"] as! String
-    //                return name.rangeOfString(searchText, options: .CaseInsensitiveSearch) != nil
-    //            }
-    //        }
-    
-    
-    /* -------------------------------- Collection View ------------------------------------------ */
-    
-    //    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    //        if let movies = movies{
-    //            return movies.count
-    //        } else {
-    //            return 0
-    //        }
-    //    }
-    //
-    //    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-    //        let cell = tableView.dequeueReusableCellWithIdentifier("MovieCell", forIndexPath: indexPath) as! MovieCell
-    //
-    //        // ! menas the optional will not be nil
-    //        let movie = movies![indexPath.row]
-    //        let title = movie["title"] as! String
-    //        let overview = movie["overview"] as! String
-    //        let posterPath = movie["poster_path"] as! String
-    //
-    //        let baseUrl = "http://image.tmdb.org/t/p/w500"
-    //        let imageUrl = NSURL(string: baseUrl + posterPath)
-    //
-    //
-    //        cell.posterView.setImageWithURL(imageUrl!)
-    //        cell.titleLabel.text = title
-    //        cell.overviewLabel.text = overview
-    //
-    //        
-    //        print("row \(indexPath.row)")
-    //        
-    //        return cell
-    //    }
-    
-    
-}
+   }
