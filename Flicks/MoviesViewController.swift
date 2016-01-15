@@ -39,25 +39,26 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         tableView.delegate = self
         movieSearchBar.delegate = self
         movieSearchBar.searchBarStyle = UISearchBarStyle.Minimal
-        movieSearchBar.alpha = 0
+        //movieSearchBar.alpha = 0
+        movieSearchBar.hidden = true
         
         self.networkErrorView.hidden = true
         
+        // Set up the refresh control for pull to refresh
+        initializeRefreshControl()
+        
+        // Set up the customize navigation bar
+        initializeNavBar()
+        
+        // call Movie api to retrieve movie information
+        networkRequest()
+    }
+
+    func initializeRefreshControl(){
         self.refreshControl = UIRefreshControl()
         self.refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
         self.refreshControl.addTarget(self,action: "refresh:", forControlEvents: UIControlEvents.ValueChanged)
         self.tableView.addSubview(refreshControl)
-        
-        // add search button
-        rightSearchBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Search, target: self, action: "searchTapped:")
-        self.navigationItem.rightBarButtonItem = rightSearchBarButtonItem
-
-        leftNavBarButton = UIBarButtonItem(customView:movieSearchBar)
-        
-        // set back button with title "Back"
-        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .Plain, target: nil, action: nil)
-        
-        networkRequest()
     }
     
     func refresh(sender:AnyObject){
@@ -66,7 +67,15 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     func initializeNavBar(){
+        // Make search button and add into the navagation bar on the right
+        rightSearchBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Search, target: self, action: "searchTapped:")
+        self.navigationItem.rightBarButtonItem = rightSearchBarButtonItem
         
+        // make search bar into a UIBarButtonItem
+        leftNavBarButton = UIBarButtonItem(customView:movieSearchBar)
+        
+        // set back button with title "Back"
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .Plain, target: nil, action: nil)
     }
 
     override func viewDidAppear(animated: Bool) {
@@ -170,9 +179,9 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         tableView.reloadData()
     }
     
+    //MARK: UISearchBarDelegate
     func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
         searchBar.setShowsCancelButton(true, animated: true)
-        
     }
 
     func searchBarTextDidEndEditing(searchBar: UISearchBar){
@@ -181,24 +190,23 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         searchBar.setShowsCancelButton(false, animated: true)
     }
     
-    //MARK: UISearchBarDelegate
     func searchBarCancelButtonClicked(searchBar: UISearchBar) {
         hideSearchBar()
     }
 
     /* Helper methods */
-    
-    @IBAction func searchTapped (sender: AnyObject) {
+    func searchTapped (sender: AnyObject) {
         showSearchBar()
     }
     
-    
     func showSearchBar() {
-        movieSearchBar.alpha = 0
+        movieSearchBar.hidden = true
+        //movieSearchBar.alpha = 0
         navigationItem.titleView = movieSearchBar
         navigationItem.setRightBarButtonItem(nil, animated: true)
         UIView.animateWithDuration(0.5, animations: {
-            self.movieSearchBar.alpha = 1
+            self.movieSearchBar.hidden = false
+            //self.movieSearchBar.alpha = 1
             }, completion: { finished in
                 self.movieSearchBar.becomeFirstResponder()
         })
