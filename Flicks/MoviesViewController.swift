@@ -17,6 +17,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     @IBOutlet weak var movieSearchBar: UISearchBar!
     @IBOutlet weak var networkErrorView: UIView!
 
+
     var movies: [NSDictionary]? // optional can be dict or nil, safer
     var allMovies: [NSDictionary]?
     
@@ -25,6 +26,9 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     var placeholderImage = UIImage(contentsOfFile: "flicks-logo")
     
     var endpoint: String!
+    
+    var rightSearchBarButtonItem:UIBarButtonItem!
+    var leftNavBarButton: UIBarButtonItem!
 
     
     // Do any additional setup after loading the view.
@@ -34,9 +38,8 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         tableView.dataSource = self
         tableView.delegate = self
         movieSearchBar.delegate = self
-        
-        
-
+        movieSearchBar.searchBarStyle = UISearchBarStyle.Minimal
+        movieSearchBar.alpha = 0
         
         self.networkErrorView.hidden = true
         
@@ -45,12 +48,25 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         self.refreshControl.addTarget(self,action: "refresh:", forControlEvents: UIControlEvents.ValueChanged)
         self.tableView.addSubview(refreshControl)
         
+        // add search button
+        rightSearchBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Search, target: self, action: "searchTapped:")
+        self.navigationItem.rightBarButtonItem = rightSearchBarButtonItem
+
+        leftNavBarButton = UIBarButtonItem(customView:movieSearchBar)
+        
+        // set back button with title "Back"
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .Plain, target: nil, action: nil)
+        
         networkRequest()
     }
     
     func refresh(sender:AnyObject){
         networkRequest()
         self.refreshControl.endRefreshing()
+    }
+    
+    func initializeNavBar(){
+        
     }
 
     override func viewDidAppear(animated: Bool) {
@@ -66,6 +82,8 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return UIStatusBarStyle.LightContent
     }
+    
+    
     
     // Call movie api to get list of movies
     func networkRequest(){
@@ -140,57 +158,21 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         return cell
     }
     
-    /* -------------------------------- Collection View ------------------------------------------ */
-    
-//    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        if let movies = movies{
-//            return movies.count
-//        } else {
-//            return 0
-//        }
-//    }
-//    
-//    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-//        let cell = tableView.dequeueReusableCellWithIdentifier("MovieCell", forIndexPath: indexPath) as! MovieCell
-//        
-//        // ! menas the optional will not be nil
-//        let movie = movies![indexPath.row]
-//        let title = movie["title"] as! String
-//        let overview = movie["overview"] as! String
-//        let posterPath = movie["poster_path"] as! String
-//        
-//        let baseUrl = "http://image.tmdb.org/t/p/w500"
-//        let imageUrl = NSURL(string: baseUrl + posterPath)
-//        
-//        
-//        cell.posterView.setImageWithURL(imageUrl!)
-//        cell.titleLabel.text = title
-//        cell.overviewLabel.text = overview
-//        
-//        
-//        print("row \(indexPath.row)")
-//        
-//        return cell
-//    }
-    
+
     /* ----------------------------- Search Bar ----------------------------- */
     
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
         searchBar.setShowsCancelButton(true, animated: true)
-        if(searchText.isEmpty) {
-            movies = movies!
-            searchBar.endEditing(true)
-        } else {
-            movies = movies!.filter {
-                let name = $0["title"] as! String
-                return name.rangeOfString(searchText, options: .CaseInsensitiveSearch) != nil
-            }
-        }
+        
+        movies = searchText.isEmpty ? movies : movies!.filter({ (movie: NSDictionary) -> Bool in
+            return (movie["title"] as! String).rangeOfString(searchText, options: .CaseInsensitiveSearch) != nil
+        })
         tableView.reloadData()
     }
     
     func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
         searchBar.setShowsCancelButton(true, animated: true)
+        
     }
 
     func searchBarTextDidEndEditing(searchBar: UISearchBar){
@@ -199,12 +181,35 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         searchBar.setShowsCancelButton(false, animated: true)
     }
     
+    //MARK: UISearchBarDelegate
     func searchBarCancelButtonClicked(searchBar: UISearchBar) {
-        searchBarTextDidEndEditing(searchBar)
-        searchBar.endEditing(true)
-        searchBar.text = ""
+        hideSearchBar()
+    }
+
+    /* Helper methods */
+    
+    @IBAction func searchTapped (sender: AnyObject) {
+        showSearchBar()
     }
     
+    
+    func showSearchBar() {
+        movieSearchBar.alpha = 0
+        navigationItem.titleView = movieSearchBar
+        navigationItem.setRightBarButtonItem(nil, animated: true)
+        UIView.animateWithDuration(0.5, animations: {
+            self.movieSearchBar.alpha = 1
+            }, completion: { finished in
+                self.movieSearchBar.becomeFirstResponder()
+        })
+    }
+    
+    func hideSearchBar() {
+        navigationItem.setRightBarButtonItem(rightSearchBarButtonItem, animated: true)
+        navigationItem.titleView = nil
+        movieSearchBar.text = ""
+    }
+    /* -------------- */
 
     // MARKL - navigation
     
@@ -216,8 +221,6 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
         let detailViewController = segue.destinationViewController as! DetailViewController
         detailViewController.movie = movie
-        
-        //print("prepare for seque called")
     }
     
     
@@ -238,5 +241,52 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     self.delay(5.0) { SVProgressHUD.dismiss() }
 
     */
+    
+    
+    // Filter dictionary for search bar
+    //        if(searchText.isEmpty) {
+    //            movies = movies!
+    //            searchBar.endEditing(true)
+    //        } else {
+    //            movies = movies!.filter {
+    //                let name = $0["title"] as! String
+    //                return name.rangeOfString(searchText, options: .CaseInsensitiveSearch) != nil
+    //            }
+    //        }
+    
+    
+    /* -------------------------------- Collection View ------------------------------------------ */
+    
+    //    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    //        if let movies = movies{
+    //            return movies.count
+    //        } else {
+    //            return 0
+    //        }
+    //    }
+    //
+    //    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    //        let cell = tableView.dequeueReusableCellWithIdentifier("MovieCell", forIndexPath: indexPath) as! MovieCell
+    //
+    //        // ! menas the optional will not be nil
+    //        let movie = movies![indexPath.row]
+    //        let title = movie["title"] as! String
+    //        let overview = movie["overview"] as! String
+    //        let posterPath = movie["poster_path"] as! String
+    //
+    //        let baseUrl = "http://image.tmdb.org/t/p/w500"
+    //        let imageUrl = NSURL(string: baseUrl + posterPath)
+    //
+    //
+    //        cell.posterView.setImageWithURL(imageUrl!)
+    //        cell.titleLabel.text = title
+    //        cell.overviewLabel.text = overview
+    //
+    //        
+    //        print("row \(indexPath.row)")
+    //        
+    //        return cell
+    //    }
+    
     
 }

@@ -42,6 +42,7 @@ class DetailViewController: UIViewController {
             posterImageView.setImageWithURL(imageUrl!)
         }
 
+        
 
         // Do any additional setup after loading the view.
     }
