@@ -186,7 +186,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
         searchBar.setShowsCancelButton(true, animated: true)
         
-        movies = searchText.isEmpty ? movies : movies!.filter({ (movie: NSDictionary) -> Bool in
+        movies = searchText.isEmpty ? allMovies : allMovies!.filter({ (movie: NSDictionary) -> Bool in
             return (movie["title"] as! String).rangeOfString(searchText, options: .CaseInsensitiveSearch) != nil
         })
         tableView.reloadData()
