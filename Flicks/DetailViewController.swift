@@ -16,14 +16,8 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var infoView: UIView!
 
-    @IBAction func onTapped(sender: AnyObject) {
-        infoView.hidden = infoView.hidden == true ? false : true
-    }
-    
     var movie: NSDictionary!
-    
-    
-    
+    let bottomFrameCoord = UIWindow(frame: UIScreen.mainScreen().bounds).frame.height
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,15 +46,34 @@ class DetailViewController: UIViewController {
             posterImageView.setImageWithURL(imageUrl!)
         }
 
-        
-
-        // Do any additional setup after loading the view.
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    @IBAction func onTapped(sender: AnyObject) {
+        // toggle info view
+        //infoView.hidden = infoView.hidden == true ? false : true
+        
+        let yCoord = self.infoView.frame.origin.y
+        print (yCoord)
+        
+        // info view is hidden
+        if yCoord >= bottomFrameCoord {
+            UIView.animateWithDuration(0.4, animations: { () -> Void in
+                self.infoView.frame.origin.y = yCoord - 200
+            })
+        }
+        // info view is shown
+        else {
+            UIView.animateWithDuration(0.4, animations: { () -> Void in
+                self.infoView.frame.origin.y = yCoord + 200
+            })
+        }
+    }
+    
     
 
     /*
