@@ -15,6 +15,10 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var overviewLabel: UILabel!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var infoView: UIView!
+
+    @IBAction func onTapped(sender: AnyObject) {
+        infoView.hidden = infoView.hidden == true ? false : true
+    }
     
     var movie: NSDictionary!
     
@@ -23,12 +27,18 @@ class DetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
         
-        scrollView.contentSize = CGSize(width: scrollView.frame.size.width, height: infoView.frame.origin.y + infoView.frame.size.height)
-        //print(movie)
+        self.tabBarController?.tabBar.hidden = true
+//        scrollView.contentSize = CGSize(width: scrollView.frame.size.width, height: infoView.frame.origin.y + infoView.frame.size.height)
+        
+        scrollView.contentSize = CGSize(width: scrollView.frame.size.width, height: infoView.frame.origin.y + 200)
         
         let title = movie["title"] as? String
         titleLabel.text = title
+        
+        // set detail view's title to the selected movie's title
+        self.navigationItem.title = title
         
         let overview = movie["overview"]
         overviewLabel.text = overview as? String
