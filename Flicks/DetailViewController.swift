@@ -19,9 +19,9 @@ class DetailViewController: UIViewController {
     var movie: NSDictionary!
     let bottomFrameCoord = UIWindow(frame: UIScreen.mainScreen().bounds).frame.height
     
+
     override func viewDidLoad() {
         super.viewDidLoad()
-
         
         self.tabBarController?.tabBar.hidden = true
 //        scrollView.contentSize = CGSize(width: scrollView.frame.size.width, height: infoView.frame.origin.y + infoView.frame.size.height)
@@ -45,8 +45,8 @@ class DetailViewController: UIViewController {
             let imageUrl = NSURL(string: baseUrl + posterPath)
             posterImageView.setImageWithURL(imageUrl!)
         }
-
     }
+    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -58,20 +58,11 @@ class DetailViewController: UIViewController {
         //infoView.hidden = infoView.hidden == true ? false : true
         
         let yCoord = self.infoView.frame.origin.y
-        print (yCoord)
+        let offset: CGFloat = yCoord >= bottomFrameCoord ? -infoView.frame.height : infoView.frame.height
         
-        // info view is hidden
-        if yCoord >= bottomFrameCoord {
-            UIView.animateWithDuration(0.4, animations: { () -> Void in
-                self.infoView.frame.origin.y = yCoord - 200
-            })
-        }
-        // info view is shown
-        else {
-            UIView.animateWithDuration(0.4, animations: { () -> Void in
-                self.infoView.frame.origin.y = yCoord + 200
-            })
-        }
+        UIView.animateWithDuration(0.4, animations: {
+            self.infoView.frame.origin.y = yCoord + offset
+        })
     }
     
     

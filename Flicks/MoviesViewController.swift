@@ -52,6 +52,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
         // call Movie api to retrieve movie information
         networkRequest()
+    
     }
     
     func initializeMovieSearchBar(){
@@ -156,6 +157,12 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("MovieCell", forIndexPath: indexPath) as! MovieCell
         
+        
+        let backgroundView = UIView()
+        backgroundView.backgroundColor = UIColor.grayColor()
+        cell.selectedBackgroundView = backgroundView
+        
+        
         // ! menas the optional will not be nil
         let movie = movies![indexPath.row]
         let title = movie["title"] as! String
@@ -174,7 +181,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             cell.titleLabel.text = title
             cell.overviewLabel.text = overview
         }
-     
+
         //print("row \(indexPath.row)")
     
         return cell
