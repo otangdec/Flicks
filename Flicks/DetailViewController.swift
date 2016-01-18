@@ -43,8 +43,43 @@ class DetailViewController: UIViewController {
         // check if nil or not
         if let posterPath = movie["poster_path"] as? String {
             let imageUrl = NSURL(string: baseUrl + posterPath)
-            posterImageView.setImageWithURL(imageUrl!)
+            //posterImageView.setImageWithURL(imageUrl!)
+            
+            //load low resolution image first then larger image
+            let baseUrlSmall = "http://image.tmdb.org/t/p/w92"
+            let imageUrlSmall = NSURL(string: baseUrlSmall + posterPath)
+            let smallImageRequest = NSURLRequest(URL: imageUrlSmall!)
+            let largeImageRequest = NSURLRequest(URL: imageUrl!)
+            
+            posterImageView.setImageWithURLRequest(smallImageRequest,
+                placeholderImage: nil ,
+                success: { (smallImageRequest, smallImageResponse, smallImage) -> Void in
+                    self.posterImageView.alpha = 0.0
+                    self.posterImageView.image = smallImage
+                    self.posterImageView.contentMode = .ScaleAspectFit
+                    
+                    UIView.animateWithDuration(0.3, animations: { self.posterImageView.alpha = 1.0 },
+                        completion: { (success) -> Void in
+                            self.posterImageView.setImageWithURLRequest(largeImageRequest,
+                                placeholderImage: smallImage,
+                                success: { (largeImageRequest, largeImageResponse, largeImage) -> Void in
+                                    self.posterImageView.image = largeImage
+                                }, failure: { (request, response, error ) -> Void in
+                                    //self.posterImageView.image = UIImage(named: "MovieHolder")
+                            })
+                        }
+                    )
+                }, failure: {(request, response, error) -> Void in
+                    //self.posterImageView.image = UIImage(named: "MovieHolder")
+                }
+            )
+
         }
+        
+        
+        
+       
+        
     }
     
 
