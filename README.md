@@ -30,8 +30,8 @@ The following **additional** features are implemented:
 ## Video Walkthrough 
 
 Here's a walkthrough of implemented user stories:
-![ALT TEXT] (Flicks-1.gif)
 
+![ALT TEXT] (Flicks-1.gif)
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
