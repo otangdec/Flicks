@@ -40,7 +40,8 @@ class DetailViewController: UIViewController {
         overviewLabel.text = overview as? String
         overviewLabel.sizeToFit()
         
-        infoView.frame.size = CGSize(width: infoView.frame.size.width, height: titleLabel.frame.height + overviewLabel.frame.height + 30)
+        // resize the infoView to wrap the content
+        infoView.frame.size = CGSize(width: infoView.frame.size.width, height: titleLabel.frame.height + overviewLabel.frame.height + 50)
         
         infoView.frame.origin.y = bottomFrameCoord - infoView.frame.height
         
