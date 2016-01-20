@@ -24,12 +24,14 @@ class DetailViewController: UIViewController {
         super.viewDidLoad()
         
         self.tabBarController?.tabBar.hidden = true
-//        scrollView.contentSize = CGSize(width: scrollView.frame.size.width, height: infoView.frame.origin.y + infoView.frame.size.height)
+
         
-        scrollView.contentSize = CGSize(width: scrollView.frame.size.width, height: infoView.frame.origin.y + 200)
+        
+        //scrollView.contentSize = CGSize(width: scrollView.frame.size.width, height: infoView.frame.origin.y + 200)
         
         let title = movie["title"] as? String
         titleLabel.text = title
+        titleLabel.sizeToFit()
         
         // set detail view's title to the selected movie's title
         self.navigationItem.title = title
@@ -37,6 +39,11 @@ class DetailViewController: UIViewController {
         let overview = movie["overview"]
         overviewLabel.text = overview as? String
         overviewLabel.sizeToFit()
+        
+        infoView.frame.size = CGSize(width: infoView.frame.size.width, height: titleLabel.frame.height + overviewLabel.frame.height + 30)
+        
+        infoView.frame.origin.y = bottomFrameCoord - infoView.frame.height
+        
         
          let baseUrl = "http://image.tmdb.org/t/p/w500"
         
@@ -56,7 +63,7 @@ class DetailViewController: UIViewController {
                 success: { (smallImageRequest, smallImageResponse, smallImage) -> Void in
                     self.posterImageView.alpha = 0.0
                     self.posterImageView.image = smallImage
-                    self.posterImageView.contentMode = .ScaleAspectFit
+                    self.posterImageView.contentMode = .ScaleAspectFill
                     
                     UIView.animateWithDuration(0.3, animations: { self.posterImageView.alpha = 1.0 },
                         completion: { (success) -> Void in
@@ -73,15 +80,8 @@ class DetailViewController: UIViewController {
                     //self.posterImageView.image = UIImage(named: "MovieHolder")
                 }
             )
-
         }
-        
-        
-        
-       
-        
     }
-    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

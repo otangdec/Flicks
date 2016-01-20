@@ -85,6 +85,8 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
         // Make search button and add into the navagation bar on the right
         rightSearchBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Search, target: self, action: "searchTapped:")
+        
+        
         self.navigationItem.rightBarButtonItem = rightSearchBarButtonItem
         
         // make search bar into a UIBarButtonItem
@@ -93,6 +95,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         // set back button with title "Back"
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .Plain, target: nil, action: nil)
     }
+    
     
     override func viewWillAppear(animated: Bool) {
         self.tabBarController?.tabBar.hidden = false
@@ -252,3 +255,4 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
    }
+
