@@ -42,6 +42,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
         tableView.dataSource = self
         tableView.delegate = self
+
         
         self.networkErrorView.hidden = true
         
@@ -104,6 +105,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     func changeView(){
+
         
     }
     
@@ -170,9 +172,9 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("MovieCell", forIndexPath: indexPath) as! MovieCell
         
-        
+        // Change the highlighted color of selected cell
         let backgroundView = UIView()
-        backgroundView.backgroundColor = UIColor.grayColor()
+        backgroundView.backgroundColor = UIColor.orangeColor()
         cell.selectedBackgroundView = backgroundView
         
         
@@ -186,8 +188,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             
             let imageUrl = NSURL(string: baseUrl + posterPath)
             let request = NSURLRequest(URL: imageUrl!)
-        
-            //cell.posterView.setImageWithURL(imageUrl!)
+
             cell.posterView.setImageWithURLRequest(request, placeholderImage: placeholderImage, success: { (request, response, imageData) -> Void in
                 UIView.transitionWithView(cell.posterView, duration: 1.0, options: UIViewAnimationOptions.TransitionCrossDissolve, animations: { cell.posterView.image = imageData }, completion: nil   )
                 }, failure: nil)
@@ -195,7 +196,6 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             cell.overviewLabel.text = overview
         }
 
-        //print("row \(indexPath.row)")
     
         return cell
     }

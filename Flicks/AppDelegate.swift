@@ -18,7 +18,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         window = UIWindow(frame: UIScreen.mainScreen().bounds)
         
-    
+        UINavigationBar.appearance().barStyle = .BlackTranslucent
+        
         
         // Add Tab Bar programmatically
         
@@ -28,6 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let nowPlayingViewController = nowPlayingNavigationController.topViewController as! MoviesViewController
         nowPlayingViewController.endpoint = "now_playing"
         
+        // TAB BAR
         nowPlayingNavigationController.tabBarItem.title = "Now Playing"
         nowPlayingNavigationController.tabBarItem.image = UIImage(named: "now_playing")
         
@@ -41,8 +43,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let tabBarController = UITabBarController()
         tabBarController.viewControllers = [nowPlayingNavigationController, topRatedNavigationController]
+        //tabBarController.tabBar.tintColor = UIColor.darkTextColor()
+        tabBarController.tabBar.tintColor = UIColor.orangeColor()
         
-        
+        tabBarController.tabBar.barTintColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5)
         window?.rootViewController = tabBarController
         window?.makeKeyAndVisible()
         
