@@ -29,6 +29,10 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     
     var rightSearchBarButtonItem:UIBarButtonItem!
     var leftNavBarButton: UIBarButtonItem!
+    var changeViewBarButton: UIBarButtonItem!
+    
+    var collectionImage = UIImage(named: "collection")
+    var hamburgerImage = UIImage(named: "hamburger")
 
     
     // Do any additional setup after loading the view.
@@ -85,17 +89,23 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
         // Make search button and add into the navagation bar on the right
         rightSearchBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Search, target: self, action: "searchTapped:")
-        
-        
         self.navigationItem.rightBarButtonItem = rightSearchBarButtonItem
         
         // make search bar into a UIBarButtonItem
         leftNavBarButton = UIBarButtonItem(customView:movieSearchBar)
         
+        // add button to toggle between collection view and table view
+        changeViewBarButton = UIBarButtonItem(image: collectionImage, style: UIBarButtonItemStyle.Plain, target: self, action: "changeView")
+        self.navigationItem.leftBarButtonItem = changeViewBarButton
+        
         // set back button with title "Back"
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .Plain, target: nil, action: nil)
+        
     }
     
+    func changeView(){
+        
+    }
     
     override func viewWillAppear(animated: Bool) {
         self.tabBarController?.tabBar.hidden = false
@@ -227,6 +237,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         //movieSearchBar.alpha = 0
         navigationItem.titleView = movieSearchBar
         navigationItem.setRightBarButtonItem(nil, animated: true)
+        navigationItem.setLeftBarButtonItem(nil, animated: true)
         UIView.animateWithDuration(0.5, animations: {
             self.movieSearchBar.hidden = false
             //self.movieSearchBar.alpha = 1
@@ -237,6 +248,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     
     func hideSearchBar() {
         navigationItem.setRightBarButtonItem(rightSearchBarButtonItem, animated: true)
+        navigationItem.setLeftBarButtonItem(changeViewBarButton, animated: true)
         navigationItem.titleView = nil
         movieSearchBar.text = ""
     }
