@@ -48,6 +48,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
         // Set up the Movie Search Bar
         initializeMovieSearchBar()
+        movieSearchBar.tintColor = UIColor.whiteColor()
         
         // Set up the refresh control for pull to refresh
         initializeRefreshControl()
@@ -226,6 +227,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     func searchBarCancelButtonClicked(searchBar: UISearchBar) {
         hideSearchBar()
     }
+    
 
     /* Helper methods */
     func searchTapped (sender: AnyObject) {

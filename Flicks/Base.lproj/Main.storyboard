@@ -18,7 +18,13 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <animations/>
                                 <rect key="contentStretch" x="0.0" y="0.0" width="1" height="0.45000000000000001"/>
+                                <color key="barTintColor" red="0.97138825269999995" green="0.97138825269999995" blue="0.97138825269999995" alpha="1" colorSpace="calibratedRGB"/>
                                 <textInputTraits key="textInputTraits"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="searchField.textColor">
+                                        <color key="value" red="0.84462941753926701" green="0.84462941753926701" blue="0.84462941753926701" alpha="1" colorSpace="calibratedRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                             </searchBar>
                             <view contentMode="scaleToFill" id="lgT-Gj-jve" userLabel="NetworkErrorView">
                                 <rect key="frame" x="0.0" y="64" width="320" height="18"/>
@@ -32,7 +38,7 @@
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="7C1E5463-5B1A-4AE6-AEF9-B902532CBDFB" id="8W8-iz-VNf">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="A6CB6932-378D-466A-BF3E-781FC0D42BF1" id="8W8-iz-VNf">
                                         <rect key="frame" x="99" y="2" width="15" height="15"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <animations/>
@@ -204,7 +210,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="7C1E5463-5B1A-4AE6-AEF9-B902532CBDFB" width="50" height="50">
+        <image name="A6CB6932-378D-466A-BF3E-781FC0D42BF1" width="50" height="50">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGOjtYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK0HCBEW
 GxwgISgrLjQ3VSRudWxs1AkKCwwNDg8QViRjbGFzc1xOU0ltYWdlRmxhZ3NWTlNSZXBzV05TQ29sb3KA
