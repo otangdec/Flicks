@@ -175,7 +175,8 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
         // Change the highlighted color of selected cell
         let backgroundView = UIView()
-        backgroundView.backgroundColor = UIColor.orangeColor()
+//        backgroundView.backgroundColor = UIColor.orangeColor()
+        backgroundView.backgroundColor = UIColor(red: 252/255, green: 135/255, blue: 0/255, alpha: 0.5)
         cell.selectedBackgroundView = backgroundView
         
         
