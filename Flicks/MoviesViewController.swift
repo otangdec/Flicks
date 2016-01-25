@@ -128,7 +128,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     func networkRequest(){
         
         let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
-        let url = NSURL(string:"https://api.themoviedb.org/3/movie/\(endpoint)?api_key=\(apiKey)")
+        let url = NSURL(string:"\(endpoint)?api_key=\(apiKey)")
         let request = NSURLRequest(URL: url!)
         
         let session = NSURLSession(
@@ -140,7 +140,6 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         SVProgressHUD.show()
         let task : NSURLSessionDataTask = session.dataTaskWithRequest(request,
             completionHandler: { (dataOrNil, response, error) in
-                
                 SVProgressHUD.dismiss()
                 if let data = dataOrNil {
                     if let responseDictionary = try! NSJSONSerialization.JSONObjectWithData(
@@ -150,10 +149,11 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                             self.movies = responseDictionary["results"] as? [NSDictionary]
                             self.allMovies = self.movies!
                             self.tableView.reloadData()
-                    } else {
-                        self.networkErrorView.hidden = false
                     }
+                } else {
+                    self.networkErrorView.hidden = false
                 }
+        
         });
         task.resume()
     }
