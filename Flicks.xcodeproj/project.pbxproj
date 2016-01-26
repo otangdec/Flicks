@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		C0A8F61C66C7C0887A6D07F9 /* Pods_Flicks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D6EBC81600EE68E393070D3 /* Pods_Flicks.framework */; };
+		D026CBDB1C55B4A800ED784B /* CollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D026CBDA1C55B4A800ED784B /* CollectionViewController.swift */; };
 		D0555F171C3BBF8800630BA5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0555F161C3BBF8800630BA5 /* AppDelegate.swift */; };
 		D0555F1C1C3BBF8800630BA5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D0555F1A1C3BBF8800630BA5 /* Main.storyboard */; };
 		D0555F211C3BBF8800630BA5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D0555F1F1C3BBF8800630BA5 /* LaunchScreen.storyboard */; };
@@ -20,6 +21,7 @@
 /* Begin PBXFileReference section */
 		6A36149A29E8BFDBEC855678 /* Pods-Flicks.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Flicks.release.xcconfig"; path = "Pods/Target Support Files/Pods-Flicks/Pods-Flicks.release.xcconfig"; sourceTree = "<group>"; };
 		7D6EBC81600EE68E393070D3 /* Pods_Flicks.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Flicks.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D026CBDA1C55B4A800ED784B /* CollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewController.swift; sourceTree = "<group>"; };
 		D0555F131C3BBF8800630BA5 /* Flicks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Flicks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0555F161C3BBF8800630BA5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D0555F1B1C3BBF8800630BA5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -97,6 +99,7 @@
 			children = (
 				D0555F281C3BC04E00630BA5 /* MoviesViewController.swift */,
 				D0CD872C1C48687B005AB75D /* DetailViewController.swift */,
+				D026CBDA1C55B4A800ED784B /* CollectionViewController.swift */,
 			);
 			name = "view controllers";
 			sourceTree = "<group>";
@@ -237,6 +240,7 @@
 				D0555F291C3BC04E00630BA5 /* MoviesViewController.swift in Sources */,
 				D0555F2C1C3BCEB000630BA5 /* MovieCell.swift in Sources */,
 				D0CD872D1C48687B005AB75D /* DetailViewController.swift in Sources */,
+				D026CBDB1C55B4A800ED784B /* CollectionViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

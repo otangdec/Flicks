@@ -102,7 +102,6 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
         // set back button with title "Back"
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .Plain, target: nil, action: nil)
-        
     }
     
     func changeView(){
