@@ -22,6 +22,8 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     var movies: [NSDictionary]? // optional can be dict or nil, safer
     var allMovies: [NSDictionary]?
     var idCasts: [String: [String]]? = Dictionary<String, [String]>()
+    var genreNames: [String: [String]]? = Dictionary<String, [String]>()
+    var languagesDict: [String: [String]]? = Dictionary<String, [String]>()
     
     var refreshControl: UIRefreshControl!
     var filteredData: [NSDictionary]?
@@ -152,6 +154,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                             
                             for movie in self.movies! {
                                 self.requestCredit(movie["id"] as! Int)
+                                self.requestID(movie["id"] as! Int)
                             }
                             self.tableView.reloadData()
                             
@@ -186,9 +189,8 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                             
                             let allCasts = responseDictionary.valueForKeyPath("cast") as! NSArray
                             let castNames = allCasts.map{ $0.valueForKeyPath!("name") as! String }
-                            //print(castNames)
+                    
                             self.idCasts?.updateValue(castNames, forKey: String(movieId))
-                            //print(self.idCasts)
                             self.tableView.reloadData()
                     }
                 } else {
@@ -198,6 +200,47 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         });
         task.resume()
 
+    }
+    
+    func requestID(movieId: Int){
+        let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
+        let url = NSURL(string:"https://api.themoviedb.org/3/movie/\(movieId)?api_key=\(apiKey)")
+        let request = NSURLRequest(URL: url!)
+        
+        let session = NSURLSession(
+            configuration: NSURLSessionConfiguration.defaultSessionConfiguration(),
+            delegate:nil,
+            delegateQueue:NSOperationQueue.mainQueue()
+        )
+        
+        //SVProgressHUD.show()
+        let task : NSURLSessionDataTask = session.dataTaskWithRequest(request,
+            completionHandler: { (dataOrNil, response, error) in
+                //SVProgressHUD.dismiss()
+                if let data = dataOrNil {
+                    if let responseDictionary = try! NSJSONSerialization.JSONObjectWithData(
+                        data, options:[]) as? NSDictionary {
+                            //assign cast to movie id: ["3234":"john, jill"]
+                            
+                            let allGenre = responseDictionary.valueForKeyPath("genres") as! NSArray
+                            let genreNames = allGenre.map{ $0.valueForKeyPath!("name") as! String }
+                            
+                            let allLanguages = responseDictionary.valueForKey("spoken_languages") as! NSArray
+                            let languages = allLanguages.map{ $0.valueForKeyPath!("name") as! String }
+                            
+                            self.genreNames?.updateValue(genreNames, forKey: String(movieId))
+                            self.languagesDict?.updateValue(languages, forKey: String(movieId))
+                            
+                            
+                            self.tableView.reloadData()
+                    }
+                } else {
+                    self.networkErrorView.hidden = false
+                }
+                
+        });
+        task.resume()
+        
     }
     
     
@@ -226,10 +269,14 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         // ! menas the optional will not be nil
         let movie = movies![indexPath.row]
         let title = movie["title"] as! String
-        let language = movie["original_language"] as! String
-        print(movie["id"])
+        //let language = movie["original_language"] as! String
+        let languageList = self.languagesDict![String(movie.valueForKey("id")!)]
+
         let casts = self.idCasts![ String(movie.valueForKey("id")!) ]
-        print("==== casts: \(casts)")
+        
+        let genreList = self.genreNames![String(movie.valueForKey("id")!)]
+        
+        let releaseDate = movie["release_date"] as! String
         let vote = movie["vote_average"] as! Double
         let baseUrl = "http://image.tmdb.org/t/p/w500"
         
@@ -243,14 +290,28 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                 }, failure: nil)
             cell.titleLabel.text = title
             //cell.overviewLabel.text = overview
-            cell.languageLabel.text = language
+            
+            if languageList != nil{
+                let languageString = (languageList?.joinWithSeparator(","))
+                cell.languageLabel.text = languageString
+            } else {
+                cell.languageLabel.text = ""
+            }
+            
             if casts != nil {
                 cell.castNamesLabel.text = "\(casts![0]), \(casts![1])"
             } else {
                 cell.castNamesLabel.text = ""
             }
-            //cell.castNamesLabel.text =  casts![0]
             
+
+            if genreList != nil {
+                let genreString = (genreList?.joinWithSeparator(" ,"))!
+                cell.genresLabel.text = genreString
+            } else {
+                cell.genresLabel.text = ""
+            }
+            cell.releaseDateLabel.text = "Release: \(releaseDate)"
             cell.voteLabel.text = "\(vote*10)%"
 
             
