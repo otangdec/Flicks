@@ -24,6 +24,9 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     var idCasts: [String: [String]]? = Dictionary<String, [String]>()
     var genreNames: [String: [String]]? = Dictionary<String, [String]>()
     var languagesDict: [String: [String]]? = Dictionary<String, [String]>()
+    var imdbIds: [String: String]? = Dictionary<String,String>()
+    var ratings:[String: String]? = Dictionary<String,String>()
+    var runtimes:[String:String]? = Dictionary<String,String>()
     
     var refreshControl: UIRefreshControl!
     var filteredData: [NSDictionary]?
@@ -213,9 +216,9 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             delegateQueue:NSOperationQueue.mainQueue()
         )
                 SVProgressHUD.show()
-                let task : NSURLSessionDataTask = session.dataTaskWithRequest(request,
+            let task : NSURLSessionDataTask = session.dataTaskWithRequest(request,
             completionHandler: { (dataOrNil, response, error) in
-                SVProgressHUD.dismiss()
+//                SVProgressHUD.dismiss()
                 if let data = dataOrNil {
                     if let responseDictionary = try! NSJSONSerialization.JSONObjectWithData(
                         data, options:[]) as? NSDictionary {
@@ -225,11 +228,21 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                             let allLanguages = responseDictionary.valueForKey("spoken_languages") as! NSArray
                             let languages = allLanguages.map{ $0.valueForKeyPath!("name") as! String }
                             
+                            let imdbId = responseDictionary.valueForKey("imdb_id") as! String
+                            self.imdbIds?.updateValue(imdbId, forKey:("\(movieId)"))
+                        
+                            
+                            for _ in self.movies! {
+                                self.requestRatingandRuntime((self.imdbIds?["\(movieId)"])!)
+                            }
+                            
+                            
                             self.genreNames?.updateValue(genreNames, forKey: String(movieId))
                             self.languagesDict?.updateValue(languages, forKey: String(movieId))
                             
-                            
                             self.tableView.reloadData()
+                             SVProgressHUD.dismiss()
+            
                     }
                 } else {
                     self.networkErrorView.hidden = false
@@ -240,6 +253,39 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
     }
     
+    func requestRatingandRuntime(imdbId: String){
+        let url = NSURL(string:"http://www.omdbapi.com/?i=\(imdbId)&plot=short&r=json")
+        let request = NSURLRequest(URL: url!)
+        let session = NSURLSession(
+            configuration: NSURLSessionConfiguration.defaultSessionConfiguration(),
+            delegate:nil,
+            delegateQueue:NSOperationQueue.mainQueue()
+        )
+        
+        let task : NSURLSessionDataTask = session.dataTaskWithRequest(request,
+            completionHandler: { (dataOrNil, response, error) in
+                if let data = dataOrNil {
+                    if let responseDictionary = try! NSJSONSerialization.JSONObjectWithData(
+                        data, options:[]) as? NSDictionary {
+
+                            if let rating = responseDictionary["Rated"]{
+                                self.ratings?.updateValue(rating as! String, forKey:("\(imdbId)"))
+                            }
+                        
+
+                            if let runtime = responseDictionary["Runtime"]{
+                                self.runtimes?.updateValue(runtime as! String, forKey: ("\(imdbId)"))
+                            }
+                            
+                            self.tableView.reloadData()
+
+                    }
+                }
+                
+        });
+        task.resume()
+        
+    }
     
     /* ------------------------------- Table View ---------------------------- */
     
@@ -272,6 +318,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         let casts = self.idCasts![ String(movie.valueForKey("id")!) ]
         
         let genreList = self.genreNames![String(movie.valueForKey("id")!)]
+        let imdbId = self.imdbIds![String(movie.valueForKey("id")!)] ?? ""
         
         let releaseDate = movie["release_date"] as! String
         let vote = movie["vote_average"] as! Double
@@ -294,6 +341,24 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             } else {
                 cell.languageLabel.text = "Unspecified"
             }
+            
+            if let ratingLabelText = self.ratings![String(imdbId)]{
+                if(ratingLabelText == "PG-13"){
+                    cell.ratingView.image = UIImage(named: "pg-13")
+                } else if(ratingLabelText == "R"){
+                    cell.ratingView.image = UIImage(named: "rate-r")
+                } else {
+                    cell.ratingView.image = UIImage(named: "unrated-stamp")
+                }
+                //cell.ratingLabel.text = ratingLabelText
+            }
+            
+            if let runtimeLabelText = self.runtimes![String(imdbId)]{
+                cell.runtimeLabel.text = runtimeLabelText
+            } else {
+                cell.runtimeLabel.text = "N/A"
+            }
+            
             
             if casts != nil {
                 cell.castNamesLabel.text = "\(casts![0]), \(casts![1])"

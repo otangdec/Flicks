@@ -18,8 +18,9 @@ class MovieCell: UITableViewCell {
     @IBOutlet weak var castNamesLabel: UILabel!
     @IBOutlet weak var releaseDateLabel: UILabel!
     @IBOutlet weak var genresLabel: UILabel!
-    
+    @IBOutlet weak var ratingView: UIImageView!
 
+    @IBOutlet weak var runtimeLabel: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
