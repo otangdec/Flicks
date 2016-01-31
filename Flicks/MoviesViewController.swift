@@ -178,10 +178,10 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             delegateQueue:NSOperationQueue.mainQueue()
         )
         
-        //SVProgressHUD.show()
+        SVProgressHUD.show()
         let task : NSURLSessionDataTask = session.dataTaskWithRequest(request,
             completionHandler: { (dataOrNil, response, error) in
-                //SVProgressHUD.dismiss()
+                SVProgressHUD.dismiss()
                 if let data = dataOrNil {
                     if let responseDictionary = try! NSJSONSerialization.JSONObjectWithData(
                         data, options:[]) as? NSDictionary {
@@ -212,16 +212,13 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             delegate:nil,
             delegateQueue:NSOperationQueue.mainQueue()
         )
-        
-        //SVProgressHUD.show()
-        let task : NSURLSessionDataTask = session.dataTaskWithRequest(request,
+                SVProgressHUD.show()
+                let task : NSURLSessionDataTask = session.dataTaskWithRequest(request,
             completionHandler: { (dataOrNil, response, error) in
-                //SVProgressHUD.dismiss()
+                SVProgressHUD.dismiss()
                 if let data = dataOrNil {
                     if let responseDictionary = try! NSJSONSerialization.JSONObjectWithData(
                         data, options:[]) as? NSDictionary {
-                            //assign cast to movie id: ["3234":"john, jill"]
-                            
                             let allGenre = responseDictionary.valueForKeyPath("genres") as! NSArray
                             let genreNames = allGenre.map{ $0.valueForKeyPath!("name") as! String }
                             
@@ -293,9 +290,9 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             
             if languageList != nil{
                 let languageString = (languageList?.joinWithSeparator(","))
-                cell.languageLabel.text = languageString
+                cell.languageLabel.text = "Language: \(languageString!)"
             } else {
-                cell.languageLabel.text = ""
+                cell.languageLabel.text = "Unspecified"
             }
             
             if casts != nil {
@@ -309,9 +306,9 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                 let genreString = (genreList?.joinWithSeparator(" ,"))!
                 cell.genresLabel.text = genreString
             } else {
-                cell.genresLabel.text = ""
+                cell.genresLabel.text = "Unspecified"
             }
-            cell.releaseDateLabel.text = "Release: \(releaseDate)"
+            cell.releaseDateLabel.text = "Released: \(releaseDate)"
             cell.voteLabel.text = "\(vote*10)%"
 
             
