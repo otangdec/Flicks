@@ -348,8 +348,10 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             
             if let ratingLabelText = self.ratings![String(imdbId)]{
                 if(ratingLabelText == "PG-13" || ratingLabelText == "PG"){
+                    cell.unratedView.hidden = true
                     cell.ratingView.image = UIImage(named: "pg-13")
                 } else if(ratingLabelText == "R"){
+                    cell.unratedView.hidden = true
                     cell.ratingView.image = UIImage(named: "rate-r")
                 } else if(ratingLabelText == "N/A"){
                     cell.unratedView.image = UIImage(named: "unrated-stamp-45")
