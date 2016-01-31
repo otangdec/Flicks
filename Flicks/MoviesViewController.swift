@@ -270,6 +270,8 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
 
                             if let rating = responseDictionary["Rated"]{
                                 self.ratings?.updateValue(rating as! String, forKey:("\(imdbId)"))
+                            } else {
+                                self.ratings?.updateValue("N/A", forKey: ("\(imdbId)"))
                             }
                         
 
@@ -307,7 +309,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
 //        backgroundView.backgroundColor = UIColor.orangeColor()
         backgroundView.backgroundColor = UIColor(red: 252/255, green: 135/255, blue: 0/255, alpha: 0.5)
         cell.selectedBackgroundView = backgroundView
-        
+    
         
         // ! menas the optional will not be nil
         let movie = movies![indexPath.row]
@@ -341,14 +343,16 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             } else {
                 cell.languageLabel.text = "Unspecified"
             }
+            //print(imdbIds)
+            print(ratings)
             
             if let ratingLabelText = self.ratings![String(imdbId)]{
-                if(ratingLabelText == "PG-13"){
+                if(ratingLabelText == "PG-13" || ratingLabelText == "PG"){
                     cell.ratingView.image = UIImage(named: "pg-13")
                 } else if(ratingLabelText == "R"){
                     cell.ratingView.image = UIImage(named: "rate-r")
-                } else {
-                    cell.ratingView.image = UIImage(named: "unrated-stamp")
+                } else if(ratingLabelText == "N/A"){
+                    cell.unratedView.image = UIImage(named: "unrated-stamp-45")
                 }
                 //cell.ratingLabel.text = ratingLabelText
             }
@@ -361,9 +365,17 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             
             
             if casts != nil {
-                cell.castNamesLabel.text = "\(casts![0]), \(casts![1])"
-            } else {
-                cell.castNamesLabel.text = ""
+                let castsString: String!
+                if casts!.count > 1{
+                    castsString = "\(casts![0]), \(casts![1])"
+                } else if casts!.count == 1 {
+                    castsString = "\(casts![0])"
+                } else{
+                    castsString = ""
+                }
+                
+                cell.castNamesLabel.text = castsString
+
             }
             
 

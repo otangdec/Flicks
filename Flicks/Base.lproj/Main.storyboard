@@ -132,6 +132,11 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <animations/>
                                                 </imageView>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="00k-xz-Hk2">
+                                                    <rect key="frame" x="163" y="23" width="57" height="29"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <animations/>
+                                                </imageView>
                                             </subviews>
                                             <animations/>
                                         </tableViewCellContentView>
@@ -147,6 +152,7 @@
                                             <outlet property="releaseDateLabel" destination="W2f-0g-Wj7" id="u14-iI-Hbt"/>
                                             <outlet property="runtimeLabel" destination="I23-1p-fnI" id="ocQ-Qv-czQ"/>
                                             <outlet property="titleLabel" destination="1Np-ey-PdX" id="H0P-83-Byk"/>
+                                            <outlet property="unratedView" destination="00k-xz-Hk2" id="PRa-Rp-Sbk"/>
                                             <outlet property="voteLabel" destination="wf4-15-vPx" id="o6G-QB-kSQ"/>
                                             <segue destination="IdB-6B-UpD" kind="push" id="TVe-IB-gXi"/>
                                         </connections>
