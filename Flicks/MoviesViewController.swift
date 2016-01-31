@@ -16,10 +16,12 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var movieSearchBar: UISearchBar!
     @IBOutlet weak var networkErrorView: UIView!
+    @IBOutlet weak var languageLabel: UILabel!
 
 
     var movies: [NSDictionary]? // optional can be dict or nil, safer
     var allMovies: [NSDictionary]?
+    var idCasts: [String: [String]]? = Dictionary<String, [String]>()
     
     var refreshControl: UIRefreshControl!
     var filteredData: [NSDictionary]?
@@ -58,7 +60,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
         // call Movie api to retrieve movie information
         networkRequest()
-    
+        
     }
     
     func initializeMovieSearchBar(){
@@ -127,7 +129,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     func networkRequest(){
         
         let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
-        let url = NSURL(string:"\(endpoint)?api_key=\(apiKey)")
+        let url = NSURL(string:"https://api.themoviedb.org/3/movie/\(endpoint)?api_key=\(apiKey)")
         let request = NSURLRequest(URL: url!)
         
         let session = NSURLSession(
@@ -147,7 +149,12 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                             
                             self.movies = responseDictionary["results"] as? [NSDictionary]
                             self.allMovies = self.movies!
+                            
+                            for movie in self.movies! {
+                                self.requestCredit(movie["id"] as! Int)
+                            }
                             self.tableView.reloadData()
+                            
                     }
                 } else {
                     self.networkErrorView.hidden = false
@@ -156,6 +163,43 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         });
         task.resume()
     }
+    
+    func requestCredit(movieId: Int){
+        let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
+        let url = NSURL(string:"https://api.themoviedb.org/3/movie/\(movieId)/credits?api_key=\(apiKey)")
+        let request = NSURLRequest(URL: url!)
+        
+        let session = NSURLSession(
+            configuration: NSURLSessionConfiguration.defaultSessionConfiguration(),
+            delegate:nil,
+            delegateQueue:NSOperationQueue.mainQueue()
+        )
+        
+        //SVProgressHUD.show()
+        let task : NSURLSessionDataTask = session.dataTaskWithRequest(request,
+            completionHandler: { (dataOrNil, response, error) in
+                //SVProgressHUD.dismiss()
+                if let data = dataOrNil {
+                    if let responseDictionary = try! NSJSONSerialization.JSONObjectWithData(
+                        data, options:[]) as? NSDictionary {
+                            //assign cast to movie id: ["3234":"john, jill"]
+                            
+                            let allCasts = responseDictionary.valueForKeyPath("cast") as! NSArray
+                            let castNames = allCasts.map{ $0.valueForKeyPath!("name") as! String }
+                            //print(castNames)
+                            self.idCasts?.updateValue(castNames, forKey: String(movieId))
+                            //print(self.idCasts)
+                            self.tableView.reloadData()
+                    }
+                } else {
+                    self.networkErrorView.hidden = false
+                }
+                
+        });
+        task.resume()
+
+    }
+    
     
     /* ------------------------------- Table View ---------------------------- */
     
@@ -182,11 +226,15 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         // ! menas the optional will not be nil
         let movie = movies![indexPath.row]
         let title = movie["title"] as! String
-        let overview = movie["overview"] as! String
+        let language = movie["original_language"] as! String
+        print(movie["id"])
+        let casts = self.idCasts![ String(movie.valueForKey("id")!) ]
+        print("==== casts: \(casts)")
+        let vote = movie["vote_average"] as! Double
         let baseUrl = "http://image.tmdb.org/t/p/w500"
         
         if let posterPath = movie["poster_path"] as? String {
-            
+        
             let imageUrl = NSURL(string: baseUrl + posterPath)
             let request = NSURLRequest(URL: imageUrl!)
 
@@ -194,7 +242,18 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                 UIView.transitionWithView(cell.posterView, duration: 1.0, options: UIViewAnimationOptions.TransitionCrossDissolve, animations: { cell.posterView.image = imageData }, completion: nil   )
                 }, failure: nil)
             cell.titleLabel.text = title
-            cell.overviewLabel.text = overview
+            //cell.overviewLabel.text = overview
+            cell.languageLabel.text = language
+            if casts != nil {
+                cell.castNamesLabel.text = "\(casts![0]), \(casts![1])"
+            } else {
+                cell.castNamesLabel.text = ""
+            }
+            //cell.castNamesLabel.text =  casts![0]
+            
+            cell.voteLabel.text = "\(vote*10)%"
+
+            
         }
 
     

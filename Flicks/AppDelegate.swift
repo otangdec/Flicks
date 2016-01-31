@@ -27,7 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let nowPlayingNavigationController = storyboard.instantiateViewControllerWithIdentifier("MoviesNavigationController") as! UINavigationController
         let nowPlayingViewController = nowPlayingNavigationController.topViewController as! MoviesViewController
-        nowPlayingViewController.endpoint = "https://api.themoviedb.org/3/movie/now_playing"
+        nowPlayingViewController.endpoint = "now_playing"
         
         // TAB BAR
         nowPlayingNavigationController.tabBarItem.title = "Now Playing"
@@ -36,17 +36,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let topRatedNavigationController = storyboard.instantiateViewControllerWithIdentifier("MoviesNavigationController") as! UINavigationController
         let topRatedViewController = topRatedNavigationController.topViewController as! MoviesViewController
-        topRatedViewController.endpoint = "https://api.themoviedb.org/3/movie/top_rated"
+        topRatedViewController.endpoint = "top_rated"
         
         topRatedNavigationController.tabBarItem.title = "Top Rated"
         topRatedNavigationController.tabBarItem.image = UIImage(named: "top_rated")
         
         let brokenNavigationController = storyboard.instantiateViewControllerWithIdentifier("MoviesNavigationController") as! UINavigationController
         let brokenViewController = brokenNavigationController.topViewController as! MoviesViewController
-        brokenViewController.endpoint = "broken_endpoint/api/nothing"
+        brokenViewController.endpoint = "upcoming"
         
-        brokenNavigationController.tabBarItem.title = "Broken"
-        brokenNavigationController.tabBarItem.image = UIImage(named: "question")
+        brokenNavigationController.tabBarItem.title = "Upcoming"
+        brokenNavigationController.tabBarItem.image = UIImage(named: "upcoming")
 
 
         let tabBarController = UITabBarController()
