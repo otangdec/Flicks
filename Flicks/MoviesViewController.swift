@@ -343,8 +343,6 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             } else {
                 cell.languageLabel.text = "Unspecified"
             }
-            //print(imdbIds)
-            print(ratings)
             
             if let ratingLabelText = self.ratings![String(imdbId)]{
                 if(ratingLabelText == "PG-13" || ratingLabelText == "PG"){
