@@ -87,20 +87,21 @@ The following **additional** features are implemented:
 
 Please list two areas of the assignment you'd like to **discuss further with your peers** during the next class (examples include better ways to implement something, how to extend your app in certain ways, etc):
 
-1. 
-2. 
+1. Creating class to handle information
+2. The best practice to implement more than 1 API call
 
 ## Video Walkthrough 
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='https://github.com/otangdec/Flicks/blob/master/Flicks-2.gif' title='Week 2 Flicks Walk Through' width='' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
 
-Describe any challenges encountered while building the app.
+Optional and unwrapping are still complicated and not easy to wrap my head around it.
+Need to get used to look up the Swift documentation
 
 ## License
 
